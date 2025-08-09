@@ -73,50 +73,36 @@ export default function Home() {
 
   return (
     <div className="min-h-screen p-6 flex flex-col items-center gap-6">
-      <h1 className="text-2xl font-semibold">Word Hunt Solver</h1>
-      <div className="flex gap-6 flex-col md:flex-row w-full items-start justify-center">
-        <div className="flex flex-col gap-3 items-start">
-          <label className="text-sm font-medium">Upload screenshot</label>
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
-          {ocrPreview && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={ocrPreview} alt="preview" className="w-64 rounded border" />
-          )}
-          {ocrWarning && (
-            <p className="text-yellow-400 text-sm max-w-xs">{ocrWarning}</p>
-          )}
-          <button
-            onClick={solve}
-            disabled={busy}
-            className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
-          >
-            {busy ? "Working..." : "Solve"}
-          </button>
-          <button onClick={reset} className="px-4 py-2 bg-gray-100 rounded border">
-            Reset
-          </button>
+      <header className="w-full max-w-6xl flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">Word Hunt Solver</h1>
+        <div className="flex gap-2 text-sm">
+          <button onClick={() => setView("list")} className={`px-3 py-1 rounded border ${view === "list" ? "bg-white/10" : "bg-transparent"}`}>List</button>
+          <button onClick={() => setView("gallery")} className={`px-3 py-1 rounded border ${view === "gallery" ? "bg-white/10" : "bg-transparent"}`}>Gallery</button>
+        </div>
+      </header>
+
+      <section className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-[320px_1fr] gap-8">
+        <div className="card p-4">
+          <div className="flex flex-col gap-3 items-start">
+            <label className="text-sm font-medium">Upload screenshot</label>
+            <input type="file" accept="image/*" onChange={handleImageUpload} />
+            {ocrPreview && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={ocrPreview} alt="preview" className="w-64 rounded border border-white/10" />
+            )}
+            {ocrWarning && (
+              <p className="text-yellow-400 text-sm max-w-xs">{ocrWarning}</p>
+            )}
+            <div className="flex gap-2">
+              <button onClick={solve} disabled={busy} className="btn-primary disabled:opacity-50">{busy ? "Working..." : "Solve"}</button>
+              <button onClick={reset} className="px-4 py-2 rounded border border-white/10">Reset</button>
+            </div>
+          </div>
         </div>
         <div className="flex flex-col gap-4 items-center">
           <GridEditor grid={grid} onChange={setGrid} />
         </div>
-      </div>
-      <div className="w-full max-w-5xl flex items-center justify-between">
-        <div />
-        <div className="flex gap-2 text-sm">
-          <button
-            onClick={() => setView("list")}
-            className={`px-3 py-1 rounded border ${view === "list" ? "bg-white/10" : "bg-transparent"}`}
-          >
-            List
-          </button>
-          <button
-            onClick={() => setView("gallery")}
-            className={`px-3 py-1 rounded border ${view === "gallery" ? "bg-white/10" : "bg-transparent"}`}
-          >
-            Gallery
-          </button>
-        </div>
-      </div>
+      </section>
 
       {view === "list" ? (
         <WordList results={results} />

@@ -38,7 +38,10 @@ export default function Gallery({ grid, results }: Props) {
     return () => obs.disconnect();
   }, [results.length]);
 
-  const displayed = results.slice(0, count);
+  const ordered = React.useMemo(() => {
+    return [...results].sort((a, b) => b.score - a.score || b.word.length - a.word.length);
+  }, [results]);
+  const displayed = ordered.slice(0, count);
   const size = SIZE_MAP[sizeKey];
 
   return (
